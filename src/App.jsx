@@ -28,9 +28,20 @@ function App() {
 
 
   useEffect(() => {
-    fetch("http://31.57.156.248:4000/api/product/getAll").then(res => res.json()).then(data => {
-      setProducts(data.products)
-    })
+
+    const token = localStorage.getItem('token')
+    if (token) {
+      fetch("http://localhost:4000/api/product/getAll",
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          },
+        }
+      ).then(res => res.json()).then(data => {
+        setProducts(data.products)
+      })
+    }
+
   }, [isUpdate])
 
 
@@ -59,7 +70,7 @@ function App() {
 
 
   const saveProduct = (e) => {
-    fetch("http://31.57.156.248:4000/api/product/create", {
+    fetch("http://localhost4000/api/product/create", {
       method: 'POST',
       body: JSON.stringify({ productName, stock, expireDate, country, color, weight }),
       headers: {
@@ -74,7 +85,7 @@ function App() {
   }
 
   const updateProduct = (e) => {
-    fetch("http://31.57.156.248:4000/api/product/update", {
+    fetch("http://localhost:4000/api/product/update", {
       method: 'PUT',
       body: JSON.stringify({ _id: selectedProduct._id, productName, stock, expireDate, country, color, weight }),
       headers: {
@@ -84,7 +95,7 @@ function App() {
   }
 
   const deleteProduct = (_id) => {
-    fetch(`http://31.57.156.248:4000/api/product/delete/${_id}`, {
+    fetch(`http://localhost:4000/api/product/delete/${_id}`, {
       method: 'DELETE'
     }).then(() => {
       alert("Ürün Silindi")
